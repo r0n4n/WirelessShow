@@ -3,8 +3,8 @@
 //int packet_id_list[PACKET_AVAILABLE] = {1, 61, 121, 181, 241, 301, 361, 421, 481} ; // liste des premiers canaux de chaque paquet
 int indice_packet = 1 ;
 unsigned long last_reception = 0 ;
-unsigned long package_rcv_delta_t = 0 ; // delta t entre deux rÃƒÂ©ceptions de packet 
-unsigned long iterations = 0; 
+unsigned long package_rcv_delta_t = 0 ; // delta t entre deux rÃƒÂ©ceptions de packet
+unsigned long iterations = 0;
 unsigned long decimation = 100000;
 long lastPeriod = -1;
 
@@ -15,6 +15,11 @@ typedef struct {
 Payload theData;
 
 RFM69 radio = RFM69(RFM69_CS, RFM69_IRQ, IS_RFM69HCW, RFM69_IRQN);
+
+
+
+
+// Fonctions transmetteur
 
 void wireless_init(void){
   // Hard Reset the RFM module
@@ -69,7 +74,7 @@ void delete_zeros(uint8_t *packet, int i){
 }
 
 void _noDataSince() {
-  package_rcv_delta_t = millis() - last_reception;  
+  package_rcv_delta_t = millis() - last_reception;
   if (package_rcv_delta_t > NO_DATA_SINCE) {
     digitalWrite(RFM69_COM_LED, LOW) ;
   }
@@ -79,12 +84,12 @@ void _noDataSince() {
 
 void checkRFMReception(){
   if (radio.receiveDone())
-  {     
+  {
     last_reception = millis() ;
     radio.receiveDone(); //put back the radio in RX mode
   }
   _noDataSince();
-  
+
   if (iterations>=decimation){
     iterations=0;
     //Serial.println("Hello");
@@ -95,5 +100,5 @@ void checkRFMReception(){
   else {
     //Serial.println(iterations);
     iterations= iterations + 1;
-  }  
+  }
 }
